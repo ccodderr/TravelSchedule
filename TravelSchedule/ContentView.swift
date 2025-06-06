@@ -20,13 +20,13 @@ struct ContentView: View {
         .padding()
         .onAppear {
             testFetchStations()
-          //  nearestCity()
-        //    routeStations()
-//            schedualBetweenStations()
-//            carrierInfo()
-//            stationSchedule()
-//            stationsList()
-//            copyright()
+            nearestCity()
+            routeStations()
+            schedualBetweenStations()
+            carrierInfo()
+            stationSchedule()
+            stationsList()
+            copyright()
         }
     }
     
