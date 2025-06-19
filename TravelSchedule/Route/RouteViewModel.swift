@@ -5,7 +5,6 @@
 //  Created by Yana Silosieva on 14.06.2025.
 //
 
-import Foundation
 import SwiftUI
 
 enum NavigationScreen: String, Identifiable {
@@ -23,19 +22,35 @@ final class RouteViewModel: ObservableObject {
         case to
     }
     
-    @Published var fromRaw: String?
-    @Published var toRaw: String?
+    private struct RoutePoint {
+        var city: String?
+        var station: String?
+        
+        var displayText: String? {
+            guard let city, let station else { return nil }
+            return "\(city), \(station)"
+        }
+    }
     
-    private var fromCity: String?
-    private var toCity: String?
-    private var fromStation: String?
-    private var toStation: String?
+    @Published private(set) var mode: Mode = .content
+    @Published private(set) var fromRaw: String?
+    @Published private(set) var toRaw: String?
     @Published var path: [NavigationScreen] = []
     
+    private var from = RoutePoint()
+    private var to = RoutePoint()
     private var activeSelection: ActiveSelection?
     
+//    init() {
+//        
+//        Task { @MainActor in
+//            try await Task.sleep(for: .seconds(9))
+//            mode = .error(.noInternetConnection)
+//        }
+//    }
+    
     var isReadyToSearch: Bool {
-        fromStation != nil && toStation != nil
+        from.station != nil && to.station != nil
     }
     
     func selectFrom() {
@@ -49,50 +64,30 @@ final class RouteViewModel: ObservableObject {
     }
     
     func swapAction() {
-        let oldFromCity = fromCity
-        fromCity = toCity
-        toCity = oldFromCity
-        
-        let oldFromStantion = fromStation
-        fromStation = toStation
-        toStation = oldFromStantion
-        
-        if let fromCity,
-           let fromStation {
-            fromRaw = "\(fromCity), \(fromStation)"
-        }
-        if let toCity,
-           let toStation {
-            toRaw = "\(toCity), \(toStation)"
-        }
+        swap(&from, &to)
+        fromRaw = from.displayText
+        toRaw = to.displayText
     }
     
     func didSelectCity(_ city: String) {
-        print(city)
-        guard let activeSelection = activeSelection else { return }
-        switch activeSelection {
-        case .from:
-            fromCity = city
-        case .to:
-            toCity = city
+        guard let selection = activeSelection else { return }
+        switch selection {
+        case .from: from.city = city
+        case .to: to.city = city
         }
-        
         path.append(.station)
     }
     
     func didSelectStation(_ station: String) {
-        print(station)
-        
-        guard let activeSelection = activeSelection else { return }
-        switch activeSelection {
+        guard let selection = activeSelection else { return }
+        switch selection {
         case .from:
-            fromStation = station
-            fromRaw = "\(fromCity ?? "") (\(station))"
+            from.station = station
+            fromRaw = from.displayText
         case .to:
-            toStation = station
-            toRaw = "\(toCity ?? "") (\(station))"
+            to.station = station
+            toRaw = to.displayText
         }
-        
         path.removeAll()
     }
     

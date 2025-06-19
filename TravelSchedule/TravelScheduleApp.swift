@@ -9,12 +9,12 @@ import SwiftUI
 
 @main
 struct TravelScheduleApp: App {
-    @AppStorage("isDarkMode") private var isDarkMode: Bool = false
     @State private var selectedTab = 0
     @State private var showSplash = true
     
     @StateObject private var routeViewModel = RouteViewModel()
     @StateObject private var filterViewModel = FilterViewModel()
+    @StateObject private var settingsViewModel = SettingsViewModel()
     
     var body: some Scene {
         WindowGroup {
@@ -22,9 +22,8 @@ struct TravelScheduleApp: App {
                 SplashScreen()
                     .environmentObject(routeViewModel)
                     .environmentObject(filterViewModel)
-                
+                    .environmentObject(settingsViewModel)
             }
-            .preferredColorScheme(isDarkMode ? .dark : .light)
         }
     }
 }
@@ -32,7 +31,7 @@ struct TravelScheduleApp: App {
 //                testFetchStations()
 //                nearestCity()
 //                routeStations()
-//                schedualBetweenStations()
+//                scheduleBetweenStations()
 //                carrierInfo()
 //                stationSchedule()
 //                stationsList()

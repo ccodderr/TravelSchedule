@@ -12,13 +12,18 @@ enum ErrorTypeModel: String {
     case noInternetConnection
     
     var image: Image {
-        Image(self.rawValue)
+        Image(rawValue)
     }
     
     var message: String {
         switch self {
-        case .serverError: return "Ошибка сервера"
-        case .noInternetConnection: return "Нет интернета"
+        case .serverError: "Ошибка сервера"
+        case .noInternetConnection: "Нет интернета"
         }
     }
+}
+
+enum Mode {
+    case content
+    case error(ErrorTypeModel)
 }

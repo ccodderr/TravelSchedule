@@ -29,10 +29,11 @@ struct TermsOfUseView: View {
     }
 }
 
-struct WebView: UIViewRepresentable {
+private struct WebView: UIViewRepresentable {
     let url: URL
     @Environment(\.colorScheme) var colorScheme
-    
+    @AppStorage("isDarkMode") private var isDarkMode: Bool = false
+
     func makeCoordinator() -> Coordinator {
         Coordinator(colorScheme: colorScheme)
     }
@@ -71,7 +72,7 @@ struct WebView: UIViewRepresentable {
             forMainFrameOnly: false
         )
         
-        if colorScheme == .dark {
+        if isDarkMode {
             webView.configuration.userContentController.addUserScript(userScript)
         }
         
@@ -83,7 +84,7 @@ struct WebView: UIViewRepresentable {
         uiView.load(request)
     }
     
-    class Coordinator: NSObject, WKNavigationDelegate {
+    final class Coordinator: NSObject, WKNavigationDelegate {
         var colorScheme: ColorScheme
         
         init(colorScheme: ColorScheme) {

@@ -9,21 +9,19 @@ import SwiftUI
 
 struct SplashScreen: View {
     @State private var show = false
-
+    
     var body: some View {
         Color.blackUniversal
             .ignoresSafeArea()
             .overlay(
-                Image("splashScreen")
+                Image(.splashScreen)
                     .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .scaledToFill()
+                    .ignoresSafeArea()
             )
             .task {
-                Task {
-                    try await Task.sleep(for: .seconds(2))
-                    show = true
-                }
+                try? await Task.sleep(for: .seconds(2))
+                show = true
             }
             .fullScreenCover(isPresented: $show) {
                 TabScreenView()
@@ -33,6 +31,7 @@ struct SplashScreen: View {
 
 struct TabScreenView: View {
     @State private var selectedTab = 0
+    @AppStorage("isDarkMode") private var isDarkMode: Bool = false
     @EnvironmentObject private var viewModel: RouteViewModel
     @EnvironmentObject private var filterViewModel: FilterViewModel
 
@@ -41,7 +40,7 @@ struct TabScreenView: View {
             TabView(selection: $selectedTab) {
                 MainView()
                     .tabItem {
-                        Image("tab_Schedule")
+                        Image(.tabSchedule)
                             .renderingMode(.template)
                             .foregroundColor(selectedTab == 0 ? .ypBlack : .grayUniversal)
                     }
@@ -49,7 +48,7 @@ struct TabScreenView: View {
                 
                 SettingsView()
                     .tabItem {
-                        Image("tab_Settings")
+                        Image(.tabSettings)
                             .renderingMode(.template)
                             .foregroundColor(selectedTab == 1 ? .ypBlack : .grayUniversal)
                     }
@@ -69,5 +68,6 @@ struct TabScreenView: View {
                 }
             }
         }
+        .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 }

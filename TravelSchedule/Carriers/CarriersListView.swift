@@ -11,49 +11,51 @@ struct CarriersListView: View {
     @EnvironmentObject private var viewModel: RouteViewModel
     @EnvironmentObject private var filterViewModel: FilterViewModel
     @Environment(\.dismiss) private var dismiss
-
+    
     var body: some View {
-        VStack(spacing: 0) {
-            headerView
-
-            if filterViewModel.carrier.isEmpty {
-                Spacer()
-                Text("Вариантов нет")
-                    .foregroundColor(.ypBlack)
-                    .font(.system(size: 24, weight: .bold))
-                Spacer()
-            } else {
-                ScrollView {
-                    VStack(spacing: 8) {
-                        ForEach(filterViewModel.carrier) { info in
-                            CarrierCard(info: info)
+        ZStack {
+            Color.ypWhite.ignoresSafeArea()
+            VStack(spacing: 0) {
+                headerView
+                
+                if filterViewModel.carrier.isEmpty {
+                    Spacer()
+                    Text("Вариантов нет")
+                        .foregroundColor(.ypBlack)
+                        .font(.system(size: 24, weight: .bold))
+                    Spacer()
+                } else {
+                    ScrollView {
+                        VStack(spacing: 8) {
+                            ForEach(filterViewModel.carrier) { info in
+                                CarrierCard(info: info)
+                            }
                         }
+                        .padding()
                     }
-                    .padding()
+                }
+                
+                Button(action: viewModel.showFilters) {
+                    Text("Уточнить время")
+                        .foregroundColor(.whiteUniversal)
+                        .font(.system(size: 17, weight: .bold))
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blueUniversal)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .padding([.horizontal, .bottom])
                 }
             }
-
-            Button(action: viewModel.showFilters) {
-                Text("Уточнить время")
-                    .foregroundColor(.whiteUniversal)
-                    .font(.system(size: 17, weight: .bold))
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blueUniversal)
-                    .cornerRadius(16)
-                    .padding(.horizontal)
-                    .padding(.bottom)
-            }
-        }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    filterViewModel.reset()
-                    dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.ypBlack)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        filterViewModel.reset()
+                        dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.ypBlack)
+                    }
                 }
             }
         }
@@ -71,7 +73,7 @@ struct CarriersListView: View {
     }
 }
 
-struct CarrierCard: View {
+private struct CarrierCard: View {
     let info: TravelInfo
 
     var body: some View {
@@ -133,6 +135,6 @@ struct CarrierCard: View {
             .padding()
         }
         .background(Color(.lightGrayUniversal))
-        .cornerRadius(16)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }

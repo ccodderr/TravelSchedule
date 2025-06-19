@@ -44,7 +44,7 @@ struct SearchBar: View {
         .frame(maxWidth: .infinity)
         .frame(height: 36)
         .background(Color.ypLightGray)
-        .cornerRadius(10)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
         .padding(.horizontal)
     }
 }

@@ -10,8 +10,24 @@ import SwiftUI
 struct MainView: View {
     @EnvironmentObject private var viewModel: RouteViewModel
     @EnvironmentObject private var filterViewModel: FilterViewModel
-
+    
     var body: some View {
+        ZStack {
+            Color.ypWhite.ignoresSafeArea()
+            
+            switch viewModel.mode {
+            case .content:
+                contentView
+                    .padding(.horizontal)
+            case .error(let type):
+                ErrorView(errorType: type)
+            }
+        }
+    }
+}
+
+private extension MainView {
+    var contentView: some View {
         VStack {
             HStack(spacing: 16) {
                 VStack(alignment: .leading, spacing: .zero) {
@@ -79,14 +95,5 @@ struct MainView: View {
             
             Spacer()
         }
-        .padding(.horizontal)
-        .navigationTitle("Маршрут")
     }
 }
-
-//#Preview {
-//    @Previewable @StateObject var routeViewModel = RouteViewModel()
-//
-//    MainView()
-//        .environmentObject(routeViewModel)
-//}

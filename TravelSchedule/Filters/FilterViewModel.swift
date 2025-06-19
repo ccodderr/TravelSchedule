@@ -14,7 +14,7 @@ enum TransferOption: String {
 
 final class FilterViewModel: ObservableObject {
     @Published var selectedTimes: Set<DepartureTime> = []
-    @Published var transferOption: TransferOption? = nil
+    @Published var transferOption: TransferOption?
     @Published var carrier: [TravelInfo] = MockData.carriers
 
     func reset() {

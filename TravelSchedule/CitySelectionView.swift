@@ -15,55 +15,61 @@ struct CitySelectionView: View {
     let onCitySelected: (String) -> Void
     
     private var filteredCities: [String] {
-        if searchText.isEmpty {
-            return cities
-        } else {
-            return cities.filter { $0.localizedCaseInsensitiveContains(searchText) }
+        searchText.isEmpty
+        ? cities
+        : cities.filter { $0.localizedCaseInsensitiveContains(searchText)
         }
     }
     
     var body: some View {
-        VStack {
-            SearchBar(searchText: $searchText)
-                .padding(.top)
-            
-            if filteredCities.isEmpty {
-                Spacer()
-                Text("Город не найден")
-                    .foregroundColor(.ypBlack)
-                    .font(.system(size: 24, weight: .bold))
-                    .padding()
-                Spacer()
-            } else {
-                List(filteredCities, id: \.self) { city in
-                    Button(action: {
-                        onCitySelected(city)
-                    }) {
-                        HStack {
-                            Text(city)
-                                .foregroundColor(.ypBlack)
-                            
-                            Spacer()
-                            
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.ypBlack)
-                        }
-                    }
-                }
-                .listStyle(.inset)
-            }
-        }
-        .frame(maxHeight: .infinity, alignment: .top)
-        .navigationTitle("Выбор города")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
+        ZStack {
+            Color.ypWhite.ignoresSafeArea()
+            VStack {
+                SearchBar(searchText: $searchText)
+                    .padding(.top)
+                
+                if filteredCities.isEmpty {
+                    Spacer()
+                    Text("Город не найден")
                         .foregroundColor(.ypBlack)
+                        .font(.system(size: 24, weight: .bold))
+                        .padding()
+                    Spacer()
+                } else {
+                    List(filteredCities, id: \.self) { city in
+                        Button(action: {
+                            onCitySelected(city)
+                        }) {
+                            HStack {
+                                Text(city)
+                                    .foregroundColor(.ypBlack)
+                                
+                                Spacer()
+                                
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.ypBlack)
+                            }
+                        }
+                        .listRowBackground(Color.ypWhite)
+                        .listRowSeparator(.hidden)
+                    }
+                    .listStyle(.inset)
+                    .scrollContentBackground(.hidden)
+                    .background(Color.ypWhite)
+                }
+            }
+            .frame(maxHeight: .infinity, alignment: .top)
+            .navigationTitle("Выбор города")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.ypBlack)
+                    }
                 }
             }
         }
