@@ -1,34 +1,14 @@
 //
-//  ContentView.swift
+//  ApiTestFunctions.swift.swift
 //  TravelSchedule
 //
-//  Created by Yana Silosieva on 02.06.2025.
+//  Created by Yana Silosieva on 14.06.2025.
 //
 
-import SwiftUI
 import OpenAPIURLSession
 import OpenAPIRuntime
 
-struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-        .onAppear {
-            testFetchStations()
-            nearestCity()
-            routeStations()
-            schedualBetweenStations()
-            carrierInfo()
-            stationSchedule()
-            stationsList()
-            copyright()
-        }
-    }
+final class ApiTestFunctions {
     
     func testFetchStations() {
         Task {
@@ -97,21 +77,21 @@ struct ContentView: View {
         }
     }
     
-    func schedualBetweenStations() {
+    func scheduleBetweenStations() {
         let client = Client(
             serverURL: try! Servers.Server1.url(),
             transport: URLSessionTransport()
         )
         
-        let service = SchedualBetweenStationsService(
+        let service = ScheduleBetweenStationsService(
             client: client,
             apikey: "64a9210b-d557-4ff0-bcbf-8681060ea076"
         )
         
         Task {
             do {
-                let schedualBetweenStations = try await service.getSchedualBetweenStations(from: "c146", to: "c213")
-                print("Success: \(schedualBetweenStations)")
+                let scheduleBetweenStations = try await service.getScheduleBetweenStations(from: "c146", to: "c213")
+                print("Success: \(scheduleBetweenStations)")
             } catch {
                 print("Error: \(error)")
             }

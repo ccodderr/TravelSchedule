@@ -9,9 +9,30 @@ import SwiftUI
 
 @main
 struct TravelScheduleApp: App {
+    @State private var selectedTab = 0
+    @State private var showSplash = true
+    
+    @StateObject private var routeViewModel = RouteViewModel()
+    @StateObject private var filterViewModel = FilterViewModel()
+    @StateObject private var settingsViewModel = SettingsViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Group {
+                SplashScreen()
+                    .environmentObject(routeViewModel)
+                    .environmentObject(filterViewModel)
+                    .environmentObject(settingsViewModel)
+            }
         }
     }
 }
+
+//                testFetchStations()
+//                nearestCity()
+//                routeStations()
+//                scheduleBetweenStations()
+//                carrierInfo()
+//                stationSchedule()
+//                stationsList()
+//                copyright()
