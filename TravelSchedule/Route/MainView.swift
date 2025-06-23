@@ -10,6 +10,16 @@ import SwiftUI
 struct MainView: View {
     @EnvironmentObject private var viewModel: RouteViewModel
     @EnvironmentObject private var filterViewModel: FilterViewModel
+    @State private var showStories = false
+    
+    @State private var stories: [StoryModel] = [
+        StoryModel.story1,
+        StoryModel.story2,
+        StoryModel.story3,
+        StoryModel.story4
+    ]
+
+    @State private var selectedStory: StoryModel?
     
     var body: some View {
         ZStack {
@@ -23,12 +33,26 @@ struct MainView: View {
                 ErrorView(errorType: type)
             }
         }
+        .fullScreenCover(item: $selectedStory) { story in
+            StoriesView(
+                stories: $stories,
+                selectedStoryIndex: stories.firstIndex(
+                    where: { $0.id == story.id }
+                ) ?? .zero
+            )
+        }
     }
 }
 
 private extension MainView {
     var contentView: some View {
-        VStack {
+        VStack(spacing: 44) {
+            StoriesCollectionView(
+                stories: $stories,
+                selectedStory: $selectedStory
+            )
+                .padding(.top, 16)
+            
             HStack(spacing: 16) {
                 VStack(alignment: .leading, spacing: .zero) {
                     Button(action: viewModel.selectFrom) {
@@ -68,7 +92,7 @@ private extension MainView {
                     RoundedRectangle(cornerRadius: 20)
                         .fill(.whiteUniversal)
                 )
-                
+    
                 Button(action: viewModel.swapAction) {
                     Image(.swapIcon)
                 }
