@@ -51,11 +51,11 @@ private extension SettingsView {
                 
                 VStack(spacing: 16) {
                     Text("Приложение использует API «Яндекс.Расписания»")
-                        .font(.system(size: 12, weight: .regular))
+                        .font(.regular12)
                         .foregroundColor(.ypBlack)
                     
                     Text("Версия 1.0 (beta)")
-                        .font(.system(size: 12, weight: .regular))
+                        .font(.regular12)
                         .foregroundColor(.ypBlack)
                 }
                 .multilineTextAlignment(.center)

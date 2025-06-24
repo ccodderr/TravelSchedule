@@ -22,7 +22,7 @@ struct CarriersListView: View {
                     Spacer()
                     Text("Вариантов нет")
                         .foregroundColor(.ypBlack)
-                        .font(.system(size: 24, weight: .bold))
+                        .font(.bold24)
                     Spacer()
                 } else {
                     ScrollView {
@@ -64,7 +64,7 @@ struct CarriersListView: View {
     var headerView: some View {
         HStack {
             Text("\(viewModel.fromRaw ?? "") → \(viewModel.toRaw ?? "")")
-                .font(.system(size: 24, weight: .bold))
+                .font(.bold24)
                 .foregroundColor(.ypBlack)
                 .padding()
             
@@ -97,14 +97,14 @@ private struct CarrierCard: View {
                         
                         if info.hasTransfers {
                             Text("С пересадкой")
-                                .font(.system(size: 12, weight: .regular))
+                                .font(.regular12)
                                 .foregroundColor(.red)
                         }
                     }
                     Spacer()
 
                     Text(info.date)
-                        .font(.system(size: 12, weight: .regular))
+                        .font(.regular12)
                         .foregroundColor(.blackUniversal)
                 }
 

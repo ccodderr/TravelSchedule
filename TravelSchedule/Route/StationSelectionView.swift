@@ -1,23 +1,34 @@
 //
-//  CitySelectionView.swift
+//  StationSelectionView.swift
 //  TravelSchedule
 //
-//  Created by Yana Silosieva on 14.06.2025.
+//  Created by Yana Silosieva on 15.06.2025.
 //
 
 import SwiftUI
 
-struct CitySelectionView: View {
+struct StationSelectionView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var searchText: String = ""
     
-    let cities = ["Москва", "Санкт Петербург", "Сочи", "Горный воздух", "Краснодар", "Казань", "Омск", "Томск", "Пермь", "Красноярск"]
-    let onCitySelected: (String) -> Void
+    let stations = [
+        "Ленинградский вокзал",
+        "Казанский вокзал",
+        "Ярославский вокзал",
+        "Курский вокзал",
+        "Белорусский вокзал",
+        "Киевский вокзал",
+        "Рижский вокзал",
+        "Ладожский вокзал",
+        "Витебский вокзал"
+    ]
+    let onStationSelected: (String) -> Void
     
-    private var filteredCities: [String] {
-        searchText.isEmpty
-        ? cities
-        : cities.filter { $0.localizedCaseInsensitiveContains(searchText)
+    private var filteredStations: [String] {
+        if searchText.isEmpty {
+            return stations
+        } else {
+            return stations.filter { $0.localizedCaseInsensitiveContains(searchText) }
         }
     }
     
@@ -28,20 +39,20 @@ struct CitySelectionView: View {
                 SearchBar(searchText: $searchText)
                     .padding(.top)
                 
-                if filteredCities.isEmpty {
+                if filteredStations.isEmpty {
                     Spacer()
-                    Text("Город не найден")
+                    Text("Станция не найдена")
                         .foregroundColor(.ypBlack)
-                        .font(.system(size: 24, weight: .bold))
+                        .font(.bold24)
                         .padding()
                     Spacer()
                 } else {
-                    List(filteredCities, id: \.self) { city in
+                    List(filteredStations, id: \.self) { station in
                         Button(action: {
-                            onCitySelected(city)
+                            onStationSelected(station)
                         }) {
                             HStack {
-                                Text(city)
+                                Text(station)
                                     .foregroundColor(.ypBlack)
                                 
                                 Spacer()
@@ -59,7 +70,7 @@ struct CitySelectionView: View {
                 }
             }
             .frame(maxHeight: .infinity, alignment: .top)
-            .navigationTitle("Выбор города")
+            .navigationTitle("Выбор станции")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -76,8 +87,9 @@ struct CitySelectionView: View {
     }
 }
 
+
 #Preview {
-    CitySelectionView { selectedCity in
-        print("Выбран город: \(selectedCity)")
+    StationSelectionView { selectedCity in
+        print("Выбрана станция: \(selectedCity)")
     }
 }

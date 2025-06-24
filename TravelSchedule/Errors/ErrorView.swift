@@ -20,7 +20,7 @@ struct ErrorView: View {
                     .frame(width: 223, height: 223)
                 
                 Text(errorType.message)
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.bold24)
                     .foregroundStyle(Color.ypBlack)
             }
             .padding()
