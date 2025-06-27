@@ -6,8 +6,11 @@
 //
 
 import Combine
+import SwiftUI
 
+@MainActor
 final class SettingsViewModel: ObservableObject {
+    @AppStorage("isDarkMode") var isDarkMode: Bool = false
     @Published private(set) var mode: Mode = .content
     
 //    init() {

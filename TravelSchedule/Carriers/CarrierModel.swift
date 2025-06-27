@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CarrierModel {
+struct CarrierModel: Equatable, Hashable {
     let title: String
     let logo: URL?
     let email: String

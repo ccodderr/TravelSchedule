@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+@MainActor
 final class StoriesViewModel: ObservableObject {
     @Published var progress: CGFloat = 0.0
     @Published var currentStoryIndex: Int = 0

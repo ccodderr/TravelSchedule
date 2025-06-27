@@ -59,12 +59,14 @@ struct TabScreenView: View {
                 switch screen {
                 case .city:
                     CitySelectionView(onCitySelected: { viewModel.didSelectCity($0)} )
-                case .station:
-                    StationSelectionView(onStationSelected: { viewModel.didSelectStation($0)} )
+                case .station(let city):
+                    StationSelectionView(city: city, onStationSelected: { viewModel.didSelectStation($0)} )
                 case .carriers:
                     CarriersListView()
                 case .filterCarriers:
                     FilterView()
+                case .carrierDetail(let carrier):
+                    CarrierInfoView(info: carrier)
                 }
             }
         }
