@@ -8,27 +8,26 @@
 import SwiftUI
 
 struct CitySelectionView: View {
+    @StateObject private var viewModel: CitySelectionViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var searchText: String = ""
     
-    let cities = ["Москва", "Санкт Петербург", "Сочи", "Горный воздух", "Краснодар", "Казань", "Омск", "Томск", "Пермь", "Красноярск"]
-    let onCitySelected: (String) -> Void
-    
-    private var filteredCities: [String] {
-        searchText.isEmpty
-        ? cities
-        : cities.filter { $0.localizedCaseInsensitiveContains(searchText)
-        }
+    init(onCitySelected: @escaping (Components.Schemas.Settlement) -> Void) {
+        _viewModel = StateObject(wrappedValue: .init(onCitySelected: onCitySelected))
     }
     
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
             VStack {
-                SearchBar(searchText: $searchText)
+                SearchBar(searchText: $viewModel.searchText)
                     .padding(.top)
                 
-                if filteredCities.isEmpty {
+                if viewModel.loading {
+                    Spacer()
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                    Spacer()
+                } else if viewModel.filteredCities.isEmpty {
                     Spacer()
                     Text("Город не найден")
                         .foregroundColor(.ypBlack)
@@ -36,13 +35,15 @@ struct CitySelectionView: View {
                         .padding()
                     Spacer()
                 } else {
-                    List(filteredCities, id: \.self) { city in
+                    List(viewModel.filteredCities, id: \.self) { city in
                         Button(action: {
-                            onCitySelected(city)
+                            viewModel.didSelect(city)
                         }) {
                             HStack {
-                                Text(city)
-                                    .foregroundColor(.ypBlack)
+                                if let title = city.title {
+                                    Text(title)
+                                        .foregroundColor(.ypBlack)
+                                }
                                 
                                 Spacer()
                                 
@@ -71,6 +72,9 @@ struct CitySelectionView: View {
                             .foregroundColor(.ypBlack)
                     }
                 }
+            }
+            .task {
+                await viewModel.loadAllCities()
             }
         }
     }

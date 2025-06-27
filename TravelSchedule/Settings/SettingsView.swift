@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("isDarkMode") private var isDarkMode: Bool = false
     @EnvironmentObject private var viewModel: SettingsViewModel
     
     var body: some View {
@@ -32,7 +31,7 @@ private extension SettingsView {
             Color.ypWhite.ignoresSafeArea()
             
             VStack(alignment: .leading, spacing: 0) {
-                Toggle("Темная тема", isOn: $isDarkMode)
+                Toggle("Темная тема", isOn: $viewModel.isDarkMode)
                     .padding()
                     .tint(.blueUniversal)
                 

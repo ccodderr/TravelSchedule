@@ -18,7 +18,12 @@ struct CarriersListView: View {
             VStack(spacing: 0) {
                 headerView
                 
-                if filterViewModel.carrier.isEmpty {
+                if filterViewModel.loading {
+                    Spacer()
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                    Spacer()
+                } else if filterViewModel.carrier.isEmpty {
                     Spacer()
                     Text("Вариантов нет")
                         .foregroundColor(.ypBlack)
@@ -29,6 +34,9 @@ struct CarriersListView: View {
                         VStack(spacing: 8) {
                             ForEach(filterViewModel.carrier) { info in
                                 CarrierCard(info: info)
+                                    .onTapGesture {
+                                        viewModel.didSelectRoute(info)
+                                    }
                             }
                         }
                         .padding()
@@ -57,6 +65,13 @@ struct CarriersListView: View {
                             .foregroundColor(.ypBlack)
                     }
                 }
+            }
+            .task {
+                guard let from = viewModel.from.station?.codes?.yandex_code,
+                      let to = viewModel.to.station?.codes?.yandex_code
+                else { return }
+                
+                await filterViewModel.load(from: from, to: to)
             }
         }
     }

@@ -8,38 +8,29 @@
 import SwiftUI
 
 struct StationSelectionView: View {
+    @StateObject private var viewModel: StationSelectionViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var searchText: String = ""
     
-    let stations = [
-        "Ленинградский вокзал",
-        "Казанский вокзал",
-        "Ярославский вокзал",
-        "Курский вокзал",
-        "Белорусский вокзал",
-        "Киевский вокзал",
-        "Рижский вокзал",
-        "Ладожский вокзал",
-        "Витебский вокзал"
-    ]
-    let onStationSelected: (String) -> Void
-    
-    private var filteredStations: [String] {
-        if searchText.isEmpty {
-            return stations
-        } else {
-            return stations.filter { $0.localizedCaseInsensitiveContains(searchText) }
-        }
+    init(
+        city: Components.Schemas.Settlement?,
+        onStationSelected: @escaping (Components.Schemas.Station) -> Void
+    ) {
+        _viewModel = StateObject(
+            wrappedValue: .init(
+                city: city,
+                onStationSelected: onStationSelected
+            )
+        )
     }
     
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
             VStack {
-                SearchBar(searchText: $searchText)
+                SearchBar(searchText: $viewModel.searchText)
                     .padding(.top)
                 
-                if filteredStations.isEmpty {
+                if viewModel.filteredStations.isEmpty {
                     Spacer()
                     Text("Станция не найдена")
                         .foregroundColor(.ypBlack)
@@ -47,13 +38,15 @@ struct StationSelectionView: View {
                         .padding()
                     Spacer()
                 } else {
-                    List(filteredStations, id: \.self) { station in
+                    List(viewModel.filteredStations, id: \.self) { station in
                         Button(action: {
-                            onStationSelected(station)
+                            viewModel.didSelect(station)
                         }) {
                             HStack {
-                                Text(station)
-                                    .foregroundColor(.ypBlack)
+                                if let station = station.title {
+                                    Text(station)
+                                        .foregroundColor(.ypBlack)
+                                }
                                 
                                 Spacer()
                                 
@@ -88,8 +81,8 @@ struct StationSelectionView: View {
 }
 
 
-#Preview {
-    StationSelectionView { selectedCity in
-        print("Выбрана станция: \(selectedCity)")
-    }
-}
+//#Preview {
+//    StationSelectionView { selectedCity in
+//        print("Выбрана станция: \(selectedCity)")
+//    }
+//}

@@ -12,15 +12,6 @@ struct MainView: View {
     @EnvironmentObject private var filterViewModel: FilterViewModel
     @State private var showStories = false
     
-    @State private var stories: [StoryModel] = [
-        StoryModel.story1,
-        StoryModel.story2,
-        StoryModel.story3,
-        StoryModel.story4
-    ]
-
-    @State private var selectedStory: StoryModel?
-    
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
@@ -33,10 +24,10 @@ struct MainView: View {
                 ErrorView(errorType: type)
             }
         }
-        .fullScreenCover(item: $selectedStory) { story in
+        .fullScreenCover(item: $viewModel.selectedStory) { story in
             StoriesView(
-                stories: $stories,
-                selectedStoryIndex: stories.firstIndex(
+                stories: $viewModel.stories,
+                selectedStoryIndex: viewModel.stories.firstIndex(
                     where: { $0.id == story.id }
                 ) ?? .zero
             )
@@ -48,8 +39,8 @@ private extension MainView {
     var contentView: some View {
         VStack(spacing: 44) {
             StoriesCollectionView(
-                stories: $stories,
-                selectedStory: $selectedStory
+                stories: $viewModel.stories,
+                selectedStory: $viewModel.selectedStory
             )
                 .padding(.top, 16)
             
